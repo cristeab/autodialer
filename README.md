@@ -141,6 +141,6 @@ I order to show all running instances use
 
 - use
 
-   ./transcribe_folder.py <path>
+   ./transcribe_folder.py \<path>
 
-where <path> is the path to the folder where the audio files reside (wav or amr).
+where \<path> is the path to the folder where the audio files reside (wav or amr).
