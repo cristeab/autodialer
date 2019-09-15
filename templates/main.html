@@ -1,0 +1,176 @@
+<!doctype html>
+
+<html>
+
+<head>
+    <title>Auto Dialer Web Interface</title>
+    <script src="{{ url_for('static', filename='jquery-1.10.2.js') }}"></script>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+    <script src="{{ url_for('static', filename='socket.io.min.js') }}"></script>
+    <script>
+    $(document).ready(function() {
+        var socket = io.connect('http://' + document.domain + ':' + location.port);
+        socket.on('stopped', function() {
+          var btn = document.getElementById("startStopBtn");
+          if ("Stop" == btn.value) {
+            btn.click();//simulate click
+          }
+        });
+        socket.on('stats', function(msg) {
+          $('#pending').attr('value', msg.pending);
+          $('#answered').attr('value', msg.answered);
+          $('#abandoned').attr('value', msg.abandoned);
+          $('#rejected').attr('value', msg.rejected);
+          $('#total').attr('value', msg.total);
+        });
+      });
+    </script>
+</head>
+
+<div class="page">
+
+    {% block body %}
+
+    <center>
+        <h2>Auto Dialer Web Interface</h2>
+        {% if errors %}<p class=error><strong>Error:</strong> {{ errors }}{% endif %}
+        {% if started and not errors %}
+        <p class=info><strong>Started</strong>{% endif %}
+            {% if not started and not errors %}
+        <p class=info><strong>Stopped</strong>{% endif %}
+        <form action="{{ url_for('input_data') }}" method=post enctype=multipart/form-data id="mainform">
+            <table>
+                <tr>
+                    <td>Provider</td>
+                    <td>
+                        {% if 'true' == data.readonly %}
+                        <select name="provider" id="provider" style="width:60%" disabled="true">
+                        {% else %}
+                        <select name="provider" id="provider" style="width:60%">
+                        {% endif %}
+                            {% for aid in data.accountIds %}
+                            {% if aid == data.currentProviderId %}
+                            <option value="{{ aid }}" selected>{{ aid }}</option>
+                            {% else %}
+                            <option value="{{ aid }}">{{ aid }}</option>
+                            {% endif %}
+                            {% endfor %}
+                        </select>
+                        {% if 'true' == data.readonly %}
+                        <input type=submit name="button" value=New disabled><input type=submit name="button"
+                                                                                   value=Remove disabled>
+                        {% else %}
+                        <input type=submit name="button" value=New><input type=submit name="button" value=Remove>
+                        {% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <td>Max. Call Duration [s]</td>
+                    <td>
+                        {% if 'true' == data.readonly %}
+                        <input type="text" name="callDuration" value="{{ data.callDuration }}" readonly>
+                        {% else %}
+                        <input type="text" name="callDuration" value="{{ data.callDuration }}">
+                        {% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <td>Caller IDs</td>
+                    <td>
+                        {% if 'true' == data.readonly %}
+                        <input type="text" name="callerIds" style="width:100%" value="{{ data.callerIds }}"
+                               readonly><br>
+                        <input type="file" name="callerIdsFile" disabled>
+                        {% else %}
+                            {% if '' == data.callerIdsFile %}
+                            <input type="text" name="callerIds" style="width:100%" value="{{ data.callerIds }}"><br>
+                            {% else %}
+                            <input type="text" name="callerIds" style="width:100%" value="{{ data.callerIds }}"
+                                   readonly><br>
+                            {% endif %}
+                        <input type="file" name="callerIdsFile">
+                        {% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <td>Dest. Phone Numbers</td>
+                    <td>
+                        {% if 'true' == data.readonly %}
+                        <textarea cols="1" rows="10" name="destPhoneNum" style="width:100%" readonly>{{ data.destPhoneNum }}</textarea><br>
+                        <input type="file" name="destPhoneNumFile" disabled>
+                        <input type=submit name="button" value=Clear disabled>
+                        {% else %}
+                            {% if '' == data.destPhoneNumFile %}
+                            <textarea cols="1" rows="10" name="destPhoneNum"
+                                      style="width:100%">{{ data.destPhoneNum }}</textarea><br>
+                            {% else %}
+                            <textarea cols="1" rows="10" name="destPhoneNum" style="width:100%" readonly>{{ data.destPhoneNum }}</textarea><br>
+                            {% endif %}
+                        <input type="file" name="destPhoneNumFile">
+                        <input type=submit name="button" value=Clear>
+                        {% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <td>Phone Number Prefix</td>
+                    <td>
+                        {% if 'true' == data.readonly %}
+                        <input type="text" name="phoneNumberPrefix" value="{{ data.phoneNumberPrefix }}" readonly>
+                        {% else %}
+                        <input type="text" name="phoneNumberPrefix" value="{{ data.phoneNumberPrefix }}">
+                        {% endif %}
+                    </td>
+                </tr>
+            </table>
+            <br>
+            {% if started %}
+            <input type=submit name="button" id="startStopBtn" value=Stop>
+            {% else %}
+            <input type=submit name="button" id="startStopBtn" value=Start>
+            {% endif %}
+            <br>
+        </form>
+        <br>
+        Call statistics
+        <table style="table-layout: fixed; width: 90%">
+            <tr>
+                <th>Pending</th>
+                <th>Confirmed</th>
+                <th>Abandoned</th>
+                <th>Rejected</th>
+                <th>Total</th>
+            </tr>
+            <tr>
+                <td><input type="text" name="pending" id="pending" readonly style="border:none; text-align:center;"
+                           value="{{ data.pending }}"></td>
+                <td><input type="text" name="answered" id="answered" readonly style="border:none; text-align:center;"
+                           value="{{ data.answered }}"></td>
+                <td><input type="text" name="abandoned" id="abandoned" readonly style="border:none; text-align:center;"
+                           value="{{ data.abandoned }}"></td>
+                <td><input type="text" name="rejected" id="rejected" readonly style="border:none; text-align:center;"
+                           value="{{ data.rejected }}"></td>
+                <td><input type="text" name="total" id="total" readonly style="border:none; text-align:center;"
+                           value="{{ data.total }}"></td>
+            </tr>
+            <table>
+    </center>
+
+    {% endblock %}
+    {% if 'true' != data.readonly and '' != data.cdr_filename %}
+    <a href="{{ url_for('static', filename=data.cdr_filename) }}" target="_blank">Download CDR</a><br>
+    <a href="{{ url_for('static', filename=data.transcripts_filename) }}" target="_blank">Download Transcripts</a>
+    <p>
+    {% endif %}
+    <a href="login">Logout</a>
+    <script>
+    document.getElementById('provider').onchange = function() {
+      var e = document.getElementById('provider');
+      var selection = e.options[e.selectedIndex].text;
+      var loc = location.href;
+      var index = loc.indexOf("?");
+      location.href = loc.slice(0, index) + "?provider=" + selection;
+    };
+    </script>
+</div>
+
+</html>

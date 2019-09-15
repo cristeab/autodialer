@@ -1,0 +1,36 @@
+{
+  "sip_accounts": [
+    {
+      "username": "user1",
+      "playbackAudioFile": "AutoDialer.wav",
+      "destPhoneNumbers": "106, 107, 108",
+      "address": "sip.server1.com",
+      "ringingTimeSec": "10",
+      "callerIds": "abc, def",
+      "minCallDurationSec": "20",
+      "accountType": "CONFIG",
+      "maxCallDurationSec": "30",
+      "concurrentCalls": "1",
+      "phoneNumberPrefix": "",
+      "password": "secret1",
+      "port": "5060",
+      "transport": "UDP"
+    },
+    {
+      "username": "user2",
+      "playbackAudioFile": "AutoDialer.wav",
+      "destPhoneNumbers": "103, 104, 105",
+      "address": "sip.server2.com",
+      "ringingTimeSec": "20",
+      "callerIds": "xyz, wqt",
+      "minCallDurationSec": "30",
+      "accountType": "CONFIG",
+      "maxCallDurationSec": "40",
+      "concurrentCalls": "1",
+      "phoneNumberPrefix": "",
+      "password": "secret2",
+      "port": "5060",
+      "transport": "TCP"
+    }
+  ]
+}

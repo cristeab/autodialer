@@ -1,0 +1,63 @@
+<!doctype html>
+
+<html>
+
+<head>
+    <title>Add New Provider</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='jquery-ui.css') }}">
+    <script src="{{ url_for('static', filename='jquery-1.10.2.js') }}"></script>
+    <script src="{{ url_for('static', filename='jquery-ui.js') }}"></script>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+    <script src="{{ url_for('static', filename='jstz.min.js')  }}"></script>
+</head>
+
+<div class="page">
+
+    {% block body %}
+
+    <center>
+        <h2>Add New Provider</h2>
+        {% if errors %}<p class=error><strong>Error:</strong> {{ errors }}{% else %}
+        <p class=info>{% endif %}
+        <form action="{{ url_for('input_data') }}" method=post enctype=multipart/form-data id="mainform">
+            <table>
+                <tr>
+                    <td>SIP Server Address</td>
+                    <td><input type="text" name="sipServer"></td>
+                </tr>
+                <tr>
+                    <td>Port</td>
+                    <td><input type="text" name="port" value="0"></td>
+                </tr>
+                <tr>
+                    <td>Transport Type</td>
+                    <td><select name="transportType" style="width:70%">
+                        <option value="UDP" selected>UDP</option>
+                        <option value="TCP">TCP</option>
+                    </select></td>
+                </tr>
+                <tr>
+                    <td>Concurrent Calls</td>
+                    <td><input type="text" name="concurrentCalls" value="1"></td>
+                </tr>
+                <tr>
+                    <td>Username</td>
+                    <td><input type="text" name="userName"></td>
+                </tr>
+                <tr>
+                    <td>Password</td>
+                    <td><input type="password" name="password"></td>
+                </tr>
+            </table>
+            <br>
+            <input type=submit name="button" value=Add>
+        <span style="display:inline-block; width: 5%;"></span>
+            <input type=submit name="button" value=Cancel>
+            <br>
+        </form>
+    </center>
+
+    {% endblock %}
+</div>
+
+</html>

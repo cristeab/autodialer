@@ -1,0 +1,21 @@
+<html>
+  <head>
+    <title>Websoftphone login page</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+  </head>
+  <body>
+    <div class="page">
+      <h1>Please login</h1>
+      {% if errors %}
+        <p class="error"><strong>Error:</strong> {{ errors }}
+       {% else %}
+         <br>
+      {% endif %}
+      <form action="" method="post">
+        <input type="text" placeholder="Username" name="username" value="{{ data.username }}">
+         <input type="password" placeholder="Password" name="password" value="{{ data.password }}">
+        <input type="submit" value="Login">
+      </form>
+    </div>
+  </body>
+</html>
