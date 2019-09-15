@@ -17,11 +17,11 @@ import glob
 
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = '31415pi'
+app.config['SECRET_KEY'] = 'TODO'
 app.config['DOWNLOAD_FOLDER'] = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static/download')
 app.config['USERNAME'] = 'admin'
 app.config['PASSWORD'] = 'secret'
-app.config['GOOGLE_API_CREDENTIALS'] = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'sage-collector-250907-e0be5d8f9867.json')
+app.config['GOOGLE_API_CREDENTIALS'] = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'TODO.json')
 socketio = SocketIO(app, logger=False, engineio_logger=False, async_mode=None)
 parser = jp.JsonParser(os.path.join(app.config['DOWNLOAD_FOLDER'], 'providers.json'))
 

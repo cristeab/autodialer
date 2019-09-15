@@ -1,5 +1,7 @@
 == Install instructions ==
 
+- Important note: currently only Python 2 is supported.
+
 - install PJSIP library with Python bindings on Linux
    * download PJSIP library sources from http://www.pjsip.org
    * unzip the sources into some folder and enter into that folder
