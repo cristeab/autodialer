@@ -1,3 +1,56 @@
+# Features
+
+![Main Screen](screenshot.png)
+
+- Login screen (default credentials are admin/secret)
+
+- Multiple providers can be created (only one active provider can be used when dialing)
+
+- Caller IDs can be specified as either a list with comma separated values or loaded from a file (one caller ID per line). This features requires separate caller ID feature to be enabled in PJSIP library. If the number of caller IDs is smaller than the number of destination numbers caller IDs will be reused.
+
+- Destination phone numbers can be specified in the edit box or loaded from a file (one destination number per line)
+
+- Optionally a phone number prefix can be specified to be added to each destination number before dialing
+
+- Call statistics are generated and saved into a CSV file that can be downloaded
+
+- Once a call is answered the audio is recorded for each call into an amr file (sox is needed) then transcribed to text using Google Text To Speech API (you need to provide Google API credentials in a JSON file). The audio files and the transcription can be found in <root>/static/download. If Google API credentials are not provided the transcription file is not generated.
+
+# Running the application from Docker
+
+- install Docker from https://www.docker.com
+
+- from a terminal, download the Docker image
+
+    docker pull cristeab/ubuntu_autodialer
+
+- start the application with
+
+    docker run -d -p 8000:8000 cristeab/ubuntu_autodialer /start_autodialer.sh
+
+- connect the autodialer UI with your web browser using as address
+
+    http://localhost:8000
+
+- in order to verify the application status use
+
+    docker ps
+
+- in order to stop the application use
+
+    docker stop <image name>
+
+where <image name> is the string shown in column 'NAMES' by 'docker ps'
+
+- transfer all session files from Docker image to your host with
+
+    docker cp <image name>:/web_autodialer/static/download/ <dest folder>
+
+Note: By default the Docker image does not contain a service account key file. You need to copy one into
+Docker image following the install instructions and using the commands
+    docker cp <service account key file> <image name>:/web_autodialer/
+    docker run -it -p 8000:8000 cristeab/ubuntu_autodialer bash
+
 # Install instructions
 
 - Important note: currently only Python 2 is supported.
@@ -82,42 +135,6 @@ respectively. In order to stop all instances use
 I order to show all running instances use
 
     ./websoftphone.sh show
-
-
-# Running the application from Docker
-
-- install Docker from https://www.docker.com
-
-- from a terminal, download the Docker image
-
-    docker pull cristeab/ubuntu_autodialer
-
-- start the application with
-
-    docker run -d -p 8000:8000 cristeab/ubuntu_autodialer /start_autodialer.sh
-
-- connect the autodialer UI with your web browser using as address
-
-    http://localhost:8000
-
-- in order to verify the application status use
-
-    docker ps
-
-- in order to stop the application use
-
-    docker stop <image name>
-
-where <image name> is the string shown in column 'NAMES' by 'docker ps'
-
-- transfer all session files from Docker image to your host with
-
-    docker cp <image name>:/web_autodialer/static/download/ <dest folder>
-
-Note: By default the Docker image does not contain a service account key file. You need to copy one into
-Docker image following the install instructions and using the commands
-    docker cp <service account key file> <image name>:/web_autodialer/
-    docker run -it -p 8000:8000 cristeab/ubuntu_autodialer bash
 
 
 # Transcribe separately the recorded audio files
