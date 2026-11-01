@@ -1,0 +1,4 @@
+- redesign the UI
+- update the backend
+- improve system stability
+- add an installer
